@@ -1,4 +1,4 @@
-# Project Name
+# Agropulse
 This project is a Node.js application that uses PostgreSQL for database management and Umzug for database migrations.
 
 ## Table of Contents
@@ -76,7 +76,7 @@ This will:
 ### Reverting Migrations
 To revert the most recently applied migration, run:
 ```bash
-npm run migrate -- --rollback
+npm run migrate:rollback
 ```
 This will:
 - Connect to the database.
@@ -121,3 +121,4 @@ psql -U your_db_user -d your_db_name -h localhost -W
 3. Environment Variables Not Loaded
 - Ensure the .env file is in the root of your project.
 - Verify dotenv is installed and configured in your code.
+- If the migrate can't find the .env values pass them directly in the CMD
