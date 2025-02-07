@@ -6,10 +6,15 @@ import 'dotenv/config'
 import cors from 'cors'
 import { testDbConnection } from "./config/database.js"
 
+import userRouter from "./apps/user/user.routes.js"
+import authRouter from "./apps/auth/auth.routes.js"
+
 const app = express()
 const SERVER_PORT = process.env.SERVER_PORT || 8080
 testDbConnection()
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use(helmet());
 app.use(
 	rateLimit({
@@ -24,8 +29,12 @@ app.use(morgan('dev'))
 
 // routes
 app.get("/", function(req, res) {
-	res.send("The server is up and running")
+	res.status(200).json({
+		message: "The server is up and running"
+	})
 })
+app.use("/api/v1/users", userRouter)
+app.use("/api/v1/auth", authRouter)
 
 // error handling
 app.use((err, req, res, next) => {
@@ -38,4 +47,5 @@ app.listen(SERVER_PORT, function() {
 	console.log(`Sever is listening at http://localhost${SERVER_PORT}`)
 })
 
-
+// testing
+export default app;

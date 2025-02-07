@@ -7,12 +7,14 @@
     "start": "nodemon src/index.js",
     "migrate": "node src/config/migration.js",
     "migrate:rollback": "node src/config/migration.js --rollback",
-    "migrate:seed": "node src/config/migration.js --seed"
+    "migrate:seed": "node src/config/migration.js --seed",
+    "test": "mocha src/test"
   },
   "author": "",
   "license": "MIT",
   "description": "",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
@@ -23,6 +25,9 @@
     "umzug": "^3.8.2"
   },
   "devDependencies": {
-    "nodemon": "^3.1.9"
+    "chai": "^5.1.2",
+    "mocha": "^11.1.0",
+    "nodemon": "^3.1.9",
+    "supertest": "^7.0.0"
   }
 }
