@@ -9,6 +9,7 @@ This project is a Node.js application that uses PostgreSQL for database manageme
 - [Database Migrations](#database-migrations)
   - [Applying Migrations](#applying-migrations)
   - [Reverting Migrations](#reverting-migrations)
+  - [Seeding Migrations](#seeding-migrations)
 - [Folder Structure](#folder-structure)
 - [Troubleshooting](#troubleshooting)
 
