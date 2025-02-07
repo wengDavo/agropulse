@@ -1,5 +1,6 @@
 import { pool } from "../../config/database.js"
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 
 export async function signup(req, res) {
 	const { name, lastname, email, password } = req.body;
@@ -40,8 +41,6 @@ export async function signup(req, res) {
 export async function signin(req, res) {
 	const { email, password } = req.body
 
-	// let isNullProps = Object.values(req.body).every((prop) => prop === null || prop === undefined || (typeof prop === 'string' && prop.trim() === ""));
-
 	if (!email || !password) {
 		return res.status(400).json({ message: "All properties are required" });
 	}
@@ -61,7 +60,8 @@ export async function signin(req, res) {
 			return res.status(401).json({ message: " incorrect password" })
 		}
 
-		return res.status(200).json({ message: "login succesful", data: { email: user.email } })
+		const token = jwt.sign({ email: user.email }, process.env.TOKEN_SECRET, { expiresIn: "1h" });
+		return res.status(200).json({ message: "login succesful", token: token })
 
 	} catch (error) {
 		console.error(error);
