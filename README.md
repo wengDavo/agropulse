@@ -83,6 +83,20 @@ This will:
 - Revert the most recently applied migration.
 - Log the reverted migration to the console.
 
+### Running Seeds
+To run the database seeds (populating the database with initial data), run:
+
+```bash
+npm run migrate:seed
+```
+This will:
+
+- Apply any seed scripts configured in your migrations.
+- Add initial data to the database.
+
+[!Note]
+> When writing SQL files for migrations or seeds, always use single quotes (') instead of double quotes (") or smart quotes. This is important for proper SQL syntax.
+
 ## Folder Structure
 ```bash
 <project-folder>/

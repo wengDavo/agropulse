@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "start": "nodemon src/index.js",
-    "migrate": "node src/config/migrate.js",
-    "migrate:rollback": "node src/config/migrate.js --rollback"
+    "migrate": "node src/config/migration.js",
+    "migrate:rollback": "node src/config/migration.js --rollback",
+    "migrate:seed": "node src/config/migration.js --seed"
   },
   "author": "",
   "license": "MIT",
