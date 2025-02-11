@@ -9,6 +9,7 @@ import { authenticateToken } from "./middleware/authenticateToken.js"
 
 import userRouter from "./apps/user/user.routes.js"
 import authRouter from "./apps/auth/auth.routes.js"
+import aiRouter from "./apps/ai/ai.routes.js"
 
 const app = express()
 const SERVER_PORT = process.env.SERVER_PORT || 8080
@@ -41,6 +42,7 @@ app.get("/test", authenticateToken, function(req, res) {
 })
 app.use("/api/v1/users", userRouter)
 app.use("/api/v1/auth", authRouter)
+app.use("/api/v1/ai", aiRouter)
 
 // error handling
 app.use((err, req, res, next) => {
