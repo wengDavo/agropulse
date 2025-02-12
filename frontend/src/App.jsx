@@ -1,13 +1,11 @@
-import { useState } from 'react'
+import Homepage from "./pages/chat"
 
 function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-			<h1 className='bg-red-500'>hello my name is weng davo</h1>
-    </>
-  )
+	return (
+		<>
+			<Homepage />
+		</>
+	)
 }
 
 export default App
