@@ -1,34 +1,59 @@
 import fetch from 'node-fetch';
 
-const API_KEY = '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';
-const API_URL = 'https://api-inference.huggingface.co/models/meta-llama/Llama-2-7b-chat-hf';
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const OPENAI_API_URL = 'https://api.openai.com/v1/chat/completions';
 
-export async function searchDeepSeek(req, res) {
-    try {
-        const query = "can you respond";
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${API_KEY}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                model: 'deepseek-chat', // Replace with the correct model name
-                messages: [{ role: 'user', content: query }],
-            }),
-        });
+export async function searchOpenAI(req, res) {
+	try {
+		const { prompt } = req.body;
 
-        if (!response.ok) {
-            const errorData = await response.json(); // Parse the error response
-            console.error('DeepSeek API Error:', errorData);
-            return res.status(response.status).json(errorData);
-        }
+		if (!prompt || prompt.trim() === '') {
+			return res.status(400).json({ message: "Prompt required" });
+		}
 
-        const data = await response.json(); // Parse JSON response
-        console.log('Search Results:', data);
-        res.status(200).json(data);
-    } catch (error) {
-        console.error('Error fetching data from DeepSeek API:', error);
-        res.status(500).json({ error: error.message });
-    }
+		const openAIResponse = await fetch(OPENAI_API_URL, {
+			method: 'POST',
+			headers: {
+				'Authorization': `Bearer ${OPENAI_API_KEY}`,
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				model: 'gpt-4o-mini',
+				messages: [
+					{
+						role: "developer",
+						content: [
+							{
+								type: "text",
+								text: ` You are a helpful farming assistant with expertise in agriculture. You assist farmers by providing information on planting schedules, weather, and time-based farming tasks. `
+							}
+						]
+					},
+					{
+						role: "user",
+						content: [
+							{
+								type: "text",
+								text: prompt
+							}
+						]
+					}
+				],
+
+			}),
+		});
+
+		if (!openAIResponse.ok) {
+			const errorData = await openAIResponse.json();
+			console.error('OpenAI API Error:', errorData);
+			return res.status(openAIResponse.status).json(errorData);
+		}
+
+		const data = await openAIResponse.json();
+		const completion = data.choices[0].message.content
+		res.status(200).json({ completion: completion, });
+	} catch (error) {
+		res.status(500).json({ error: error.message });
+	}
 }
+

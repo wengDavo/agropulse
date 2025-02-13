@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { searchDeepSeek } from "./ai.controller.js";
+import { searchOpenAI } from "./ai.controller.js";
 
 const router = Router()
 
-router.post('/', searchDeepSeek)
+router.post('/', searchOpenAI)
 
 export default router
