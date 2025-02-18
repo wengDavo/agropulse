@@ -1,10 +1,19 @@
-import Homepage from "./pages/chat"
+import Chat from "./modules/chat"
+import { Routes, Route } from "react-router"
 
 function App() {
 	return (
-		<>
-			<Homepage />
-		</>
+		<section style={{
+			backgroundImage: "url(agroBackground.png)",
+			backgroundRepeat: "no-repeat",
+			backgroundAttachment: "fixed",
+			backgroundSize: "cover",
+			zIndex: -20
+		}}>
+			<Routes>
+				<Route index element={<Chat />} />
+			</Routes>
+		</section>
 	)
 }
 
