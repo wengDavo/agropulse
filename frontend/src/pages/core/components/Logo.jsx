@@ -1,6 +1,6 @@
-function Logo(){
+function Logo({ css }) {
 	return (
-		<svg width="66" height="64" viewBox="0 0 66 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<svg width="66" height="64" viewBox="0 0 66 64" fill="none" xmlns="http://www.w3.org/2000/svg" className={`${css}`}>
 			<rect width="66" height="64" rx="32" fill="url(#pattern0_39_382)" />
 			<defs>
 				<pattern id="pattern0_39_382" patternContentUnits="objectBoundingBox" width="1" height="1">

@@ -20,7 +20,7 @@ function Menu() {
 	]
 
 	return (
-		<section>
+		<section className="">
 			<FaBars
 				size={20}
 				color="var(--color-green-30)"
