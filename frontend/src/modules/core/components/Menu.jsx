@@ -12,10 +12,11 @@ function Menu() {
 	const toggleMenu = () => setIsMenuOpen((prev) => !prev)
 
 	const menuItems = [
-		{ label: "Sign up / Sign in", url: "#" },
-		{ label: "History", url: "#" },
-		{ label: "Settings", url: "#" },
-		{ label: "Upgrade Plan", url: "#" },
+		{ label: "Sign in", url: "/auth/signin" },
+		{ label: "Sign up", url: "/auth/signup" },
+		{ label: "Settings", url: "/settings" },
+		{ label: "History", url: "/history" },
+		{ label: "Upgrade", url: "/upgrade" },
 		{ label: "Log out", url: "#" }
 	]
 

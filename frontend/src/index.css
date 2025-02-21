@@ -4,6 +4,9 @@
 @theme {
 	--color-green-20: #E5E5E5;
 	--color-green-30: #007208;
+	--color-gray-10: #828282;
+	--color-gray-20: #5E5E5E;
+	--color-gray-30: #7E7E7E;
 	--font-logo: "Kablammo", serif;
 }
 
@@ -65,4 +68,11 @@
 	/* IE and Edge */
 	scrollbar-width: none;
 	/* Firefox */
+}
+
+.app-background-image {
+	background-image: url(agroBackground.png);
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-size: cover;
 }

@@ -23,9 +23,34 @@ function chatReducer(state, action) {
 function ChatBox() {
 	let [state, dispatch] = useReducer(chatReducer, chats);
 	const chatEndRef = useRef(null);
+	const fileInputRef = useRef(null);
 
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState(null);
+
+	// Trigger file input
+	const handleFileClick = () => {
+		fileInputRef.current.click();
+	};
+
+	// Handle file selection
+	const handleFileChange = (event) => {
+		const file = event.target.files[0];
+		if (file) {
+			const reader = new FileReader();
+			reader.onload = () => {
+				dispatch({
+					type: "ADD_MESSAGE",
+					payload: {
+						role: "user",
+						content: reader.result, // Base64 image
+						type: "image",
+					},
+				});
+			};
+			reader.readAsDataURL(file);
+		}
+	};
 
 	// Create a new chat message and send it to the server
 	const createChat = async (e) => {
@@ -40,6 +65,7 @@ function ChatBox() {
 				payload: {
 					role: "user",
 					content: message,
+					type: "text",
 				},
 			});
 
@@ -63,12 +89,12 @@ function ChatBox() {
 				}
 
 				const { completion } = await response.json();
-				console.log("Message sent successfully:", completion);
 				dispatch({
 					type: "ADD_MESSAGE",
 					payload: {
 						role: "system",
 						content: completion,
+						type: "text",
 					},
 				});
 			} catch (err) {
@@ -86,22 +112,28 @@ function ChatBox() {
 	}, [state.messages]);
 
 	return (
-		<div className="h-full flex flex-col md:px-12  py-12 relative overflow-clip">
+		<div className="h-full flex flex-col md:px-12 py-12 relative overflow-clip">
 			<article className="flex flex-col gap-2 overflow-y-scroll h-4/5 no-scrollbar">
 				{state.messages.length > 0 ? (
-					state.messages.map(({ role, content }, index) => (
+					state.messages.map(({ role, content, type }, index) => (
 						<div
 							key={index}
 							className={`p-2 rounded w-fit ${role === "system" ? "bg-green-30 text-white self-start" : "bg-green-20 text-green-30 self-end"
-								} `}
+								}`}
 						>
-							<p>{content}</p>
+							{type === "text" ? (
+								<p>{content}</p>
+							) : (
+								<img src={content} alt="Uploaded" className="max-w-xs rounded-lg" />
+							)}
 						</div>
 					))
 				) : (
-					<p className="uppercase absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-white font-extrabold">How can we help you today?</p>
+					<p className="uppercase absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center text-2xl text-white font-extrabold">
+						How can we help you today?
+					</p>
 				)}
-				<div ref={chatEndRef} /> {/* scroll here */}
+				<div ref={chatEndRef} />
 			</article>
 
 			<article className="absolute bg-white bottom-0 left-0 right-0 p-4 rounded-3xl md:w-1/2 md:mx-auto">
@@ -110,31 +142,36 @@ function ChatBox() {
 						rows="3"
 						cols="2"
 						placeholder="Send a message to Agropulse"
-						className="w-full outline-none rounded-[27px] p-2 md:p-4  placeholder:text-green-30 resize-none"
+						className="w-full outline-none rounded-[27px] p-2 md:p-4 placeholder:text-green-30 resize-none"
 						name="message"
 					></textarea>
 					<div className="flex items-center justify-between absolute bottom-0 left-0 right-4 w-full bg-white">
-						<button type="button">
-							<FaPlusCircle className="text-green-30 text-3xl" />
+						<button type="button" onClick={handleFileClick}>
+							<FaPlusCircle className="text-green-30 text-3xl cursor-pointer" />
 						</button>
-
+						<input
+							type="file"
+							accept="image/*"
+							ref={fileInputRef}
+							className="hidden"
+							onChange={handleFileChange}
+						/>
 						<p className="flex items-center gap-1 text-xs">
 							<FaClock className="text-green-30" />
 							Recent search
 						</p>
-
 						<button type="submit" disabled={loading}>
 							<FaArrowUp className="bg-green-30 text-white rounded-full p-1 text-3xl" />
 						</button>
 					</div>
 				</form>
 
-				{loading && <Loader />} {/* Loading state */}
-				{error && <p className="text-red-500">{error}</p>} {/* Error state */}
-
+				{loading && <Loader />}
+				{error && <p className="text-red-500">{error}</p>}
 			</article>
 		</div>
 	);
 }
 
 export default ChatBox;
+

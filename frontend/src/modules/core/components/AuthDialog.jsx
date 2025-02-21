@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { MdCancel } from "react-icons/md";
 import LogoText from "./LogoText";
 import Logo from "./Logo";
+import { Link } from "react-router";
 
 function AuthDialog() {
 	const dialogRef = useRef(null);
@@ -60,10 +61,10 @@ function AuthDialog() {
 					</div>
 					<div className="grid gap-y-2">
 						<button className="bg-green-500 w-full rounded-3xl outline-none text-white p-2">
-							Sign up
+							<Link to="/auth/signup">Sign up</Link>
 						</button>
 						<button className="border border-green-30 w-full rounded-3xl outline-none text-green-30 p-2">
-							Sign in
+							<Link to="/auth/signin">Sign in</Link>
 						</button>
 					</div>
 				</div>
