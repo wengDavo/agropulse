@@ -61,11 +61,34 @@ export async function signin(req, res) {
 		}
 
 		const token = jwt.sign({ email: user.email }, process.env.TOKEN_SECRET, { expiresIn: "1h" });
-		return res.status(200).json({ message: "login succesful", token: token })
+
+		// send cookie first to avoid headers already sent error
+		res.cookie("jwt_token", token, {
+			httpOnly: true,
+			maxAge: 1000 * 60 * 60 * 24, // 1 day
+		})
+
+		return res.status(200)
+			.json({ message: "login succesful", user: user.email })
 
 	} catch (error) {
 		console.error(error);
-		res.status(500).json({ message: "internal server error", error: error })
+		return res.status(500).json({ message: "internal server error", error: error })
 	}
 };
+
+export function signout(req, res) {
+	try {
+		if (!req.cookies?.jwt_token) {
+			return res.status(400).json({ message: "No active session to log out" });
+		}
+
+		res.clearCookie("jwt_token", { httpOnly: true });
+
+		return res.status(200).json({ message: "Successfully logged out" });
+
+	} catch (error) {
+		return res.status(500).json({ message: "Failed to log out" });
+	}
+}
 

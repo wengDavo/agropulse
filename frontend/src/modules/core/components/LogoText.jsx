@@ -1,12 +1,14 @@
+import { Link } from "react-router"
+
 function LogoText({css}) {
-	return (<p
-		className={`text-[25px] ${css}`}
+	return (<Link to="/"
+		className={`text-[25px] ${css} outline-none`}
 		style={{
 			fontFamily: "var(--font-logo)",
 			color: "var(--color-green-30)"
 		}}>
 		AGROPULSE
-	</p >)
+	</Link >)
 }
 
 export default LogoText

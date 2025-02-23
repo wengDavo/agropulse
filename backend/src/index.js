@@ -1,12 +1,17 @@
+// dependencies
 import express from "express"
 import helmet from "helmet"
 import { rateLimit } from 'express-rate-limit'
 import morgan from "morgan"
 import 'dotenv/config'
 import cors from 'cors'
-import { testDbConnection } from "./config/database.js"
-import { authenticateToken } from "./middleware/authenticateToken.js"
+import cookieParser from "cookie-parser"
 
+// configurations
+import { testDbConnection } from "./config/database.js"
+import { authGaurd } from "./middleware/authGaurd.js"
+
+// routes
 import userRouter from "./apps/user/user.routes.js"
 import authRouter from "./apps/auth/auth.routes.js"
 import aiRouter from "./apps/ai/ai.routes.js"
@@ -17,6 +22,7 @@ testDbConnection()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(cookieParser())
 app.use(helmet());
 app.use(
 	rateLimit({
@@ -26,7 +32,12 @@ app.use(
 		legacyHeaders: false, // Disable the `X-RateLimit-*` headers.
 	})
 )
-app.use(cors())
+app.use(cors({
+	origin: process.env.CORS_ORIGIN || [
+		"http://localhost:5173",
+	],
+	credentials: true, // Allows sending credentials
+}))
 app.use(morgan('dev'))
 
 // routes
@@ -35,7 +46,7 @@ app.get("/", function(req, res) {
 		message: "The server is up and running"
 	})
 })
-app.get("/test", authenticateToken, function(req, res) {
+app.get("/test", authGaurd, function(req, res) {
 	res.status(200).json({
 		message: "you made it"
 	})
